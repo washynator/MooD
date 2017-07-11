@@ -29,8 +29,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody myRigidbody;
     private Camera fpsCamera;
 
-    private bool isCursorLocked = true;
-
     private void Start()
     {
         GetReferences();
@@ -40,7 +38,6 @@ public class PlayerController : MonoBehaviour
     {
         CheckFireInput();
         CheckMovementInput();
-        LockCursor();
     }
 
     private void FixedUpdate()
@@ -81,29 +78,6 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, 5f))
         {
             isJumping = false;
-        }
-    }
-
-    private void LockCursor()
-    {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            isCursorLocked = !isCursorLocked;
-        }
-        /*else if (Input.GetMouseButtonUp(0))
-        {
-            isCursorLocked = true;
-        }*/
-
-        if (isCursorLocked == true)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else if (isCursorLocked == false)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
         }
     }
 
