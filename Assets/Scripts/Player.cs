@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
-public class Player : MonoBehaviour, IDamageable
+public class Player : MonoBehaviour, IDamageHandler
 {
-    public float hitPoints
+    public float HitPoints
     {
         get
         {
@@ -19,7 +19,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    public void Damage(float damageAmount)
+    public void OnDamage(DamageEventData damageAmount)
     {
         throw new NotImplementedException();
     }

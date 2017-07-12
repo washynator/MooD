@@ -6,10 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    public delegate void Shoot(float damage, float fireRate, float hitForce);
+    public delegate void Shoot();
     public static event Shoot onPlayerShoot;
 
-    private float moveSpeed = 10f;
+    private float moveSpeed = 7f;
+    private float runSpeed = 9f;
+    private bool isRunning = false;
     private Vector3 xMovement = Vector3.zero;
     private Vector3 yMovement = Vector3.zero;
     private Vector3 velocity = Vector3.zero;
@@ -52,7 +54,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onPlayerShoot != null)
             {
-                onPlayerShoot(10f, 10f, 10f);
+                onPlayerShoot();
             }
         }
     }
@@ -65,10 +67,26 @@ public class PlayerController : MonoBehaviour
 
     private void CheckMovementInput()
     {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            isRunning = true;
+        }
+        else
+        {
+            isRunning = false;
+        }
+
+        if (isRunning == true)
+        {
+            velocity = (xMovement + yMovement) * runSpeed;
+        }
+        else
+        {
+            velocity = (xMovement + yMovement) * moveSpeed;
+        }
+
         xMovement = Input.GetAxisRaw("Horizontal") * transform.right;
         yMovement = Input.GetAxisRaw("Vertical") * transform.forward;
-
-        velocity = (xMovement + yMovement) * moveSpeed;
 
         if (Input.GetButtonDown("Jump"))
         {
