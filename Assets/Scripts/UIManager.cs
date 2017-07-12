@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    private Text ammoText;
     private UIManager _instance;
     private bool isCursorLocked = true;
 
@@ -21,10 +23,22 @@ public class UIManager : MonoBehaviour
         }
     }
 
-	void Start ()
+    private void OnEnable()
+    {
+        PlayerController.onPlayerShoot += UpdateAmmoUI;
+    }
+
+    public void UpdateAmmoUI()
+    {
+        ammoText.text = "Ammo: " + Rifle.CheckAmmo();
+    }
+
+    void Start ()
 	{
         _instance = this;
-	}
+        ammoText = GetComponentInChildren<Text>();
+        ammoText.text = "Ammo: " + Rifle.CheckAmmo();
+    }
 	
 	void Update ()
 	{

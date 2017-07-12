@@ -5,13 +5,14 @@ using UnityEngine.EventSystems;
 
 public class Weapon
 {
-    public Weapon(float _fireRate, float _damage, Vector3 _hitForce, int _clipSize, bool _isHitScanWeapon)
+    public Weapon(float _fireRate, float _damage, Vector3 _hitForce, int _clipSize, bool _isHitScanWeapon, ParticleSystem _shootingParticles)
     {
         fireRate = _fireRate;
         damage = _damage;
         hitForce = _hitForce;
         clipSize = _clipSize;
         isHitScanWeapon = _isHitScanWeapon;
+        shootingParticles = _shootingParticles;
     }
 
     public Weapon()
@@ -24,6 +25,7 @@ public class Weapon
     private Vector3 hitForce = Vector3.one;
     private int clipSize = 10;
     private bool isHitScanWeapon = true;
+    private ParticleSystem shootingParticles;
 
     public DamageEventData damageEventData;
 
@@ -96,6 +98,19 @@ public class Weapon
         }
     }
 
+    public ParticleSystem ShootingParticles
+    {
+        get
+        {
+            return shootingParticles;
+        }
+
+        set
+        {
+            shootingParticles = value;
+        }
+    }
+
     private void Start()
     {
         //damageEventData = new DamageEventData(EventSystem.current);
@@ -128,6 +143,13 @@ public class Weapon
             if (Physics.Raycast(CheckRay(), out hitInfo, Mathf.Infinity) && isHitScanWeapon == true)
             {
                 lastShot = Time.time;
+
+                if (shootingParticles != null)
+                {
+                    // TODO: Check how can I instantiate the ParticleSystem at Guns position
+                    //GameObject.Instantiate(shootingParticles);
+                    //psGO.transform.parent
+                }
 
                 ExecuteEvents.ExecuteHierarchy(hitInfo.collider.gameObject, damageEventData, DamageEventData.OnDamageHandler);
 

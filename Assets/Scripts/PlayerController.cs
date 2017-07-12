@@ -40,6 +40,11 @@ public class PlayerController : MonoBehaviour
     {
         CheckFireInput();
         CheckMovementInput();
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Rifle.Reload();
+        }
     }
 
     private void FixedUpdate()
