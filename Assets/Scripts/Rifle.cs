@@ -6,16 +6,17 @@ using UnityEngine.EventSystems;
 public class Rifle : MonoBehaviour
 {
     static Weapon rifle = new Weapon();
-    public ParticleSystem shootingParticles;
+    public GameObject impactParticles;
 
     private void OnEnable()
     {
         rifle.ClipSize = 50;
         rifle.Damage = 0.25f;
-        rifle.HitForce = Vector3.one * 2f;
+        rifle.HitForce = Vector3.one * 0.35f;
         rifle.IsHitScanWeapon = true;
         rifle.FireRate = 0.1f;
-        rifle.ShootingParticles = shootingParticles;
+        rifle.CurrentWeapon = this.gameObject;
+        rifle.ImpactEffect = impactParticles;
 
         rifle.damageEventData = new DamageEventData(EventSystem.current);
         rifle.damageEventData.Initialize(rifle.Damage);

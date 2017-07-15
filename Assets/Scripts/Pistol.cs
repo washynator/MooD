@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class Pistol : MonoBehaviour
 {
-    Weapon pistol = new Weapon();
+    static Weapon pistol = new Weapon();
 
     private void OnEnable()
     {
@@ -14,11 +14,17 @@ public class Pistol : MonoBehaviour
         pistol.HitForce = Vector3.one;
         pistol.IsHitScanWeapon = true;
         pistol.FireRate = 0.25f;
+        pistol.CurrentWeapon = this.gameObject;
 
         pistol.damageEventData = new DamageEventData(EventSystem.current);
         pistol.damageEventData.Initialize(pistol.Damage);
 
         pistol.OnEnable();
+    }
+
+    public static string CheckAmmo()
+    {
+        return pistol.ClipSize.ToString();
     }
 
     private void OnDisable()
