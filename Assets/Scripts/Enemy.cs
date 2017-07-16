@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -44,8 +43,9 @@ public class Enemy : MonoBehaviour, IDamageHandler
 	{
         player = FindObjectOfType<PlayerController>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.destination = player.transform.position;
-	}
+        //navMeshAgent.destination = player.transform.position;
+        navMeshAgent.destination = LevelGenerator.Instance.GetWaypoint(Random.Range(0, LevelGenerator.Instance.wayPoints.Count - 1));
+    }
 
 	void Update ()
 	{
@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour, IDamageHandler
 
     private void UpdatePlayerPosition()
     {
-        navMeshAgent.destination = player.transform.position;
+        //navMeshAgent.destination = LevelGenerator.Instance.GetWaypoint(Random.Range(0, LevelGenerator.Instance.wayPoints.Count - 1));
     }
 
 }

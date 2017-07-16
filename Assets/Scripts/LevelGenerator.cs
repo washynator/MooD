@@ -1,19 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
+    [SerializeField]
+    private Waypoint waypointPrefab;
+
     [SerializeField]
     private Texture2D map;
 
     [SerializeField]
     private ColorToPrefab[] colorMappings;
 
+    public Dictionary<Vector3, Waypoint> wayPoints = new Dictionary<Vector3, Waypoint>();
     private int offSet = 10;
 
-	void Awake ()
+    public static LevelGenerator Instance;
+
+    void Awake ()
 	{
+        Instance = this;
         GenerateMap();
 	}
 	
@@ -31,7 +39,7 @@ public class LevelGenerator : MonoBehaviour
     private void GenerateObject(int x, int y)
     {
         Color pixelColor = map.GetPixel(x, y);
-
+        
         if (pixelColor.a == 0)
         {
             return;
@@ -45,10 +53,25 @@ public class LevelGenerator : MonoBehaviour
 
                 for (int i = 0; i < colorMapping.prefabs.Length; i++)
                 {
+                    if (Random.Range(1, 100) < 20 && colorMapping.color.Equals(Color.black))
+                    {
+                        wayPoints.Add(position, waypointPrefab);
+                    }
+
                     Instantiate(colorMapping.prefabs[i], position, Quaternion.identity, transform);
                 }
             }
         }
+
+        foreach (KeyValuePair<Vector3, Waypoint> waypoint in wayPoints)
+        {
+            Instantiate(waypoint.Value, waypoint.Key, Quaternion.identity, transform);
+        }
+    }
+
+    public Vector3 GetWaypoint(int index)
+    {
+        return wayPoints.ElementAt(index).Key;        
     }
 
 }
