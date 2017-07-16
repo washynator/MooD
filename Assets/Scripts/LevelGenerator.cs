@@ -12,7 +12,7 @@ public class LevelGenerator : MonoBehaviour
 
     private int offSet = 10;
 
-	void Start ()
+	void Awake ()
 	{
         GenerateMap();
 	}

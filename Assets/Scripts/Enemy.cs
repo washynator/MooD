@@ -2,11 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, IDamageHandler
 {
     private float hitPoints = 5f;
     private PlayerController player;
+    private NavMeshAgent navMeshAgent;
+    private float lastChecked = 0f;
+    private float checkRate = 0.2f;
 
     public float HitPoints
     {
@@ -39,14 +43,22 @@ public class Enemy : MonoBehaviour, IDamageHandler
     void Start ()
 	{
         player = FindObjectOfType<PlayerController>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.destination = player.transform.position;
 	}
-	
-	void FixedUpdate ()
+
+	void Update ()
 	{
-        transform.LookAt(player.transform);
-        //transform.Translate(player.transform.position * Time.deltaTime * 0.5f);
-        Vector3 movePosition = Vector3.MoveTowards(transform.position, player.transform.position + new Vector3(1.5f,1.5f,1.5f), Time.deltaTime * 1.5f);
-        GetComponent<Rigidbody>().MovePosition(movePosition);
+        if (Time.time > lastChecked + checkRate)
+        {
+            lastChecked = Time.time;
+            UpdatePlayerPosition();
+        }
 	}
+
+    private void UpdatePlayerPosition()
+    {
+        navMeshAgent.destination = player.transform.position;
+    }
 
 }
