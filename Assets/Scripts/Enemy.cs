@@ -6,6 +6,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageHandler
 {
     private float hitPoints = 5f;
+    private PlayerController player;
 
     public float HitPoints
     {
@@ -37,12 +38,15 @@ public class Enemy : MonoBehaviour, IDamageHandler
 
     void Start ()
 	{
-		
+        player = FindObjectOfType<PlayerController>();
 	}
 	
-	void Update ()
+	void FixedUpdate ()
 	{
-		
+        transform.LookAt(player.transform);
+        //transform.Translate(player.transform.position * Time.deltaTime * 0.5f);
+        Vector3 movePosition = Vector3.MoveTowards(transform.position, player.transform.position + new Vector3(1.5f,1.5f,1.5f), Time.deltaTime * 1.5f);
+        GetComponent<Rigidbody>().MovePosition(movePosition);
 	}
 
 }
