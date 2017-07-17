@@ -15,7 +15,7 @@ public class LevelGenerator : MonoBehaviour
     private ColorToPrefab[] colorMappings;
 
     public Dictionary<Vector3, Waypoint> wayPoints = new Dictionary<Vector3, Waypoint>();
-    private int offSet = 10;
+    private float offSet = 5;
 
     public static LevelGenerator Instance;
 
