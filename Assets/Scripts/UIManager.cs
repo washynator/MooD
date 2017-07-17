@@ -5,7 +5,13 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField]
     private Text ammoText;
+
+    [SerializeField]
+    private Text healthText;
+
+    private Player player;
     private UIManager _instance;
     private bool isCursorLocked = true;
 
@@ -28,21 +34,34 @@ public class UIManager : MonoBehaviour
         PlayerController.onPlayerShoot += UpdateAmmoUI;
     }
 
+    private void OnDisable()
+    {
+        PlayerController.onPlayerShoot -= UpdateAmmoUI;
+    }
+
     public void UpdateAmmoUI()
     {
         ammoText.text = "Ammo: " + Rifle.CheckAmmo();
     }
 
+    public void UpdateHealthUI()
+    {
+        healthText.text = "Health: " + player.HitPoints.ToString();
+    }
+
     void Start ()
 	{
         _instance = this;
-        ammoText = GetComponentInChildren<Text>();
-        ammoText.text = "Ammo: " + Rifle.CheckAmmo();
+        player = FindObjectOfType<Player>();
+
+        //ammoText.text = "Ammo: " + Rifle.CheckAmmo();
     }
 	
 	void Update ()
 	{
         LockCursor();
+        UpdateAmmoUI();
+        UpdateHealthUI();
     }
 
     private void LockCursor()

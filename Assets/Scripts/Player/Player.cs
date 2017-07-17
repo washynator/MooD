@@ -20,8 +20,9 @@ public class Player : MonoBehaviour, IDamageHandler
         {
             hitPoints = value;
 
-            if (hitPoints <= 0)
+            if (hitPoints <= 0f)
             {
+                hitPoints = 0f;
                 Die();
             }
         }
