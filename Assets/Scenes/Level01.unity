@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypointPrefab: {fileID: 114680076932607826, guid: 7510db4683742d4419e8d9a363059b33,
     type: 2}
-  map: {fileID: 2800000, guid: c176944a559fcff44a5f3125d3676291, type: 3}
+  map: {fileID: 2800000, guid: bb862eed734762549829f7f79416b03e, type: 3}
   colorMappings:
   - color: {r: 0, g: 0, b: 0, a: 1}
     prefabs:

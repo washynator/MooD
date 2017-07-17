@@ -6,22 +6,36 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerController))]
 public class Player : MonoBehaviour, IDamageHandler
 {
+    [SerializeField]
+    private float hitPoints = 100f;
+
     public float HitPoints
     {
         get
         {
-            throw new NotImplementedException();
+            return hitPoints;
         }
 
         set
         {
-            throw new NotImplementedException();
+            hitPoints = value;
+
+            if (hitPoints <= 0)
+            {
+                Die();
+            }
         }
     }
 
     public void OnDamage(DamageEventData damageAmount)
     {
-        throw new NotImplementedException();
+        HitPoints -= damageAmount.Damage;
+    }
+
+    private void Die()
+    {
+        gameObject.GetComponent<Player>().enabled = false;
+        gameObject.GetComponent<PlayerController>().enabled = false;
     }
 
     void Start ()

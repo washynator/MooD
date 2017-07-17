@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class Enemy : MonoBehaviour, IDamageHandler
 {
@@ -24,7 +25,7 @@ public class Enemy : MonoBehaviour, IDamageHandler
     private float lineOfSightDistance = 150f;
 
     private RaycastHit hitInfo;
-    
+    private DamageEventData damageEventData;
 
     public float HitPoints
     {
@@ -73,6 +74,7 @@ public class Enemy : MonoBehaviour, IDamageHandler
 
             switch(enemyState)
             {
+                // TODO: the check for attack distance is buggy, also the enemy faces weird directions
                 case EnemyState.Patrolling:
                     if (CheckIfPathIsComplete() == true)
                     {
@@ -81,9 +83,37 @@ public class Enemy : MonoBehaviour, IDamageHandler
                     break;
                 case EnemyState.Chasing:
                     navMeshAgent.destination = player.transform.position;
+
+                    if (CheckIfPathIsComplete() == true)
+                    {
+                        enemyState = EnemyState.Attacking;
+                    }
+                    else
+                    {
+                        enemyState = EnemyState.Chasing;
+                    }
+
                     break;
                 case EnemyState.Attacking:
-                    navMeshAgent.destination = player.transform.position;
+                    if (player != null)
+                    {
+                        navMeshAgent.destination = player.transform.position;
+
+                        if (player.enabled == false)
+                        {
+                            enemyState = EnemyState.Patrolling;
+                        }
+                    }
+
+                    if (CheckIfPathIsComplete() == true)
+                    {
+                        Attack(5f);
+                    }
+                    else
+                    {
+                        enemyState = EnemyState.Chasing;
+                    }
+
                     break;
                 case EnemyState.Dead:
                     break;
@@ -93,27 +123,29 @@ public class Enemy : MonoBehaviour, IDamageHandler
 
     private void LookForPlayer()
     {
-        Vector3 playerDirection = player.transform.position - transform.position;
-        float angle = Vector3.Angle(playerDirection, transform.forward);
-
-        if (angle < fieldOfView * 0.5f)
+        if (player != null)
         {
-            if (Physics.Raycast(transform.position + transform.up + transform.forward, playerDirection.normalized, out hitInfo, lineOfSightDistance))
+            Vector3 playerDirection = player.transform.position - transform.position;
+            float angle = Vector3.Angle(playerDirection, transform.forward);
+
+            if (angle < fieldOfView * 0.5f)
             {
-                // TODO: add a timer that checks how long ago the player was seen, change state accordingly
-                if (hitInfo.transform.GetComponent<Player>() != null)
+                if (Physics.Raycast(transform.position + transform.up + transform.forward, playerDirection.normalized, out hitInfo, lineOfSightDistance))
                 {
-                    enemyState = EnemyState.Chasing;
-                    Debug.Log(enemyState);
-                }
-                else
-                {
-                    enemyState = EnemyState.Patrolling;
-                    Debug.Log(enemyState);
+                    // TODO: add a timer that checks how long ago the player was seen, change state accordingly
+                    if (hitInfo.transform.GetComponent<Player>() != null)
+                    {
+                        enemyState = EnemyState.Chasing;
+                        Debug.Log(enemyState);
+                    }
+                    else
+                    {
+                        enemyState = EnemyState.Patrolling;
+                        Debug.Log(enemyState);
+                    }
                 }
             }
         }
-
     }
 
     private bool CheckIfPathIsComplete()
@@ -126,6 +158,15 @@ public class Enemy : MonoBehaviour, IDamageHandler
             }
         }
         return false;
+    }
+
+    protected virtual void Attack(float _damage)
+    {
+        print("Attacking... and doing " + _damage + " points of damage");
+        damageEventData = new DamageEventData(EventSystem.current);
+        damageEventData.Initialize(_damage);
+
+        player.OnDamage(damageEventData);
     }
 
 }
