@@ -200,7 +200,8 @@ public class Weapon
 
                     if (hitInfo.rigidbody != null)
                     {
-                        hitInfo.rigidbody.AddForceAtPosition(hitForce, hitInfo.point, ForceMode.Impulse);
+                        //hitInfo.rigidbody.AddForceAtPosition(hitForce, hitInfo.point, ForceMode.Impulse);
+                        hitInfo.rigidbody.AddForce(hitForce);
                     }
                 }
             }
